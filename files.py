@@ -1,0 +1,1 @@
+open('mop.txt', 'w')
