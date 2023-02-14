@@ -20,5 +20,6 @@ c = 0
 for tag in tags:
     c += 1
     s += int(tag.contents[0])
+    
 print("count is ", c)
 print("sum is ", s)
