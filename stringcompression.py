@@ -10,7 +10,6 @@ def compressString(s):
         else:
             # compressed += s[i - 1] + str(count)
             compressed += s[i - 1]
-
             if count > 1:
                 compressed += ("{0} ".format(str(count)))
 
