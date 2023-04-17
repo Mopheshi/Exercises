@@ -16,8 +16,8 @@ import javax.imageio.ImageIO;
 public class Blur {
 
     public static void main(String[] args) throws Exception {
-        final String importPath = "C:\\Users\\MOPHE\\Documents\\NetBeansProjects\\Exercises\\src\\exercises\\Images\\lagertha.jpg";
-        final String exportPath = "C:\\Users\\MOPHE\\Documents\\NetBeansProjects\\Exercises\\src\\exercises\\Images\\blurredLagertha.jpg";
+        final String importPath = "image.jpg";
+        final String exportPath = "blurredImage.jpg";
 
         // Load the image
         BufferedImage img = ImageIO.read(new File(importPath));
