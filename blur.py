@@ -21,9 +21,14 @@ kernel = kernel / (kernel_size * kernel_size)
 # Convolution
 result = cv2.filter2D(gray, -1, kernel)
 
-# Show blurred image
-cv2.imshow("Image", result)
-cv2.waitKey(1)
+# Convert grayscale to RGB
+# blurredImage = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
 # Save the blurred image
 cv2.imwrite("Images/blurred_image.jpg", result)
+
+# Show blurred image
+cv2.imshow("Original Image", img)
+cv2.imshow("Blurred Image", result)
+# waitKey = 0 means the system will continue to show image until user presses any key
+cv2.waitKey(0)
