@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 
 # Load the image
-img = cv2.imread("Images/lagertha.jpg")
+img = cv2.imread("Images/l'agertha.jpg")
 
 # Convert to grayscale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
