@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 /**
  *
+ * @Chatbot AI
  * @author MOPHE
  */
 public class ImageThreshold {
