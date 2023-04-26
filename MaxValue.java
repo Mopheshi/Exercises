@@ -74,9 +74,9 @@ public class MaxValue {
         // for (int rows = 0; rows < array.length; rows++) can be used instead of the for-loop on the line below
         for (int[][] rows : array) {
             for (int[] columns : rows) {
-                for (int k = 0; k < columns.length; k++) {
-                    if (columns[k] > max) {
-                        max = columns[k];
+                for (int balablu = 0; balablu < columns.length; balablu++) {
+                    if (columns[balablu] > max) {
+                        max = columns[balablu];
                     }
                 }
             }
