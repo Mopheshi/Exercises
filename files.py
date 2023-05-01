@@ -27,6 +27,6 @@ file.close()
 # p = os.path.isfile('mop.txt')
 # print(p)
 
-# Returns a list with files/other directories contained in the specified directory
+# Returns a arr with files/other directories contained in the specified directory
 p = os.listdir('C:/Users/MOPHE/PycharmProjects/Exercises')
 print(p)

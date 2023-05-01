@@ -11,9 +11,9 @@
 ## There are no jokers.
 ## The Jack/Queen/King all count as 10.
 ## The Ace can count as 11 or 1.
-## Use the following list as the deck of cards:
+## Use the following arr as the deck of cards:
 ## cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-## The cards in the list have equal probability of being drawn.
+## The cards in the arr have equal probability of being drawn.
 ## Cards are not removed from the deck as they are drawn.
 ## The computer is the dealer.
 
@@ -64,7 +64,7 @@ def blackjackCapstone():
     # and returns the score.
     # Look up the sum() function to help you do this.
     def calculate_score(cards):
-        """Returns the sum of all the items in list 'cards'"""
+        """Returns the sum of all the items in arr 'cards'"""
         ace, jack, blackjack = 11, 10, 0
         if ace in cards and jack in cards:
             return blackjack

@@ -10,7 +10,7 @@ temporaryInteger = 0
 # Getting user inputs
 li = [int(integer) for integer in input("Enter the 3 integers separated with a single space ' ', biko...: ").split()]
 
-print("Unsorted list =", li)
+print("Unsorted arr =", li)
 
 for i in range(iterator, len(li)):
     for j in range(i + 1, len(li)):
@@ -19,4 +19,4 @@ for i in range(iterator, len(li)):
             li[i] = li[j]
             li[j] = temporaryInteger
 
-print("Sorted list =", li, "\nSmallest =", li[0], "\nMedium =", li[1], "\nHighest =", li[2])
+print("Sorted arr =", li, "\nSmallest =", li[0], "\nMedium =", li[1], "\nHighest =", li[2])
