@@ -13,19 +13,19 @@ file.close()
 # print(cwd)
 
 # Get absolute path
-# p = os.path.abspath('mop.txt')
+# path = os.path.abspath('mop.txt')
 
 # Check if a path exists
-# p = os.path.exists('mop.txt')
-# print(p)
+# path = os.path.exists('mop.txt')
+# print(path)
 
 # Check if it's a directory
-# p = os.path.isdir('C:/Users/NPC-ICT/PycharmProjects/Exercises')
-# print(p)
+# path = os.path.isdir('C:/Users/NPC-ICT/PycharmProjects/Exercises')
+# print(path)
 
 # Check if it's a file
-# p = os.path.isfile('mop.txt')
-# print(p)
+# path = os.path.isfile('mop.txt')
+# print(path)
 
 # Returns a arr with files/other directories contained in the specified directory
 p = os.listdir('C:/Users/MOPHE/PycharmProjects/Exercises')

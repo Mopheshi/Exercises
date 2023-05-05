@@ -6,7 +6,7 @@
 import cv2
 import numpy as np
 
-# Load the image
+# Load the img
 img = cv2.imread("Images/l'agertha.jpg")
 
 # Convert to grayscale
@@ -24,11 +24,11 @@ result = cv2.filter2D(gray, -1, kernel)
 # Convert grayscale to RGB
 # blurredImage = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
-# Save the blurred image
+# Save the blurred img
 cv2.imwrite("Images/blurred_image.jpg", result)
 
-# Show blurred image
+# Show blurred img
 cv2.imshow("Original Image", img)
 cv2.imshow("Blurred Image", result)
-# waitKey = 0 means the system will continue to show image until user presses any key
+# waitKey = 0 means the system will continue to show img until user presses any key
 cv2.waitKey(0)
