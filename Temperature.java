@@ -20,7 +20,7 @@ public class Temperature {
 
         tempConversion(celsius);
         
-        System.out.println(" °F.");
+        System.out.println("°F.");
     }
 
     private static void tempConversion(double celsius) {
