@@ -7,7 +7,7 @@ import bisect
 #
 # print(lines)
 
-with open('Files/english.txt', 'r') as file:
+with open('Files/english.txt', encoding='utf-8') as file:
     l = [line.strip() for line in file]
 
 l = sorted(l)
