@@ -1,3 +1,4 @@
+// link to database...
 var ss = SpreadsheetApp.openByUrl("");
 
 var sheetLaptop = ss.getSheetByName('Laptop');
