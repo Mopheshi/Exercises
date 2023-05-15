@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--@ChatGPT-->
+<html>
+<head>
+    <title>e-Exam</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">E-Exam</a>
+</nav>
+
+<div class="container mt-3">
+    <h2>Welcome to the E-Exam</h2>
+    <p>This exam is designed to test your knowledge of the following subject:</p>
+    <h4>Subject: [Subject Name]</h4>
+    <p>You have [Exam Time] minutes to complete the exam. Please answer all questions to the best of your ability.</p>
+    <button class="btn btn-primary" id="start-btn">Start Exam</button>
+    <div id="exam-container" class="d-none">
+        <!-- Questions and answers will be generated here dynamically -->
+        <div id="question-1">
+            <h4>Question 1:</h4>
+            <p>What is the capital of France?</p>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question1" value="a" id="q1a">
+                <label class="form-check-label" for="q1a">
+                    Paris
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question1" value="b" id="q1b">
+                <label class="form-check-label" for="q1b">
+                    London
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question1" value="c" id="q1c">
+                <label class="form-check-label" for="q1c">
+                    Madrid
+                </label>
+            </div>
+        </div>
+        <!-- Add more questions and answers as needed -->
+        <button class="btn btn-primary" id="submit-btn">Submit Exam</button>
+    </div>
+</div>
+
+<script>
+		$(document).ready(function() {
+			$('#start-btn').click(function() {
+				$('#exam-container').removeClass('d-none');
+			});
+
+			$('#submit-btn').click(function() {
+				// TODO: Handle submitting the exam and grading the answers
+			});
+		});
+
+</script>
+
+</body>
+</html>
