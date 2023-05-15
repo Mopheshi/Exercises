@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>e-Exam Platform</title>
+</head>
+<body>
+    <h1>e-Exam Platform</h1>
+    <form action="/submit" method="post">
+        {% for question in questions %}
+            <h3>{{ question.question }}</h3>
+            {% for option in question.options %}
+                <input type="radio" name="question{{ question.id }}" value="{{ option }}"> {{ option }}<br>
+            {% endfor %}
+            <br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

@@ -14,8 +14,8 @@ def get_answer():
 
 
 class Exam:
-    def __init__(self, questions):
-        self.questions = questions
+    def __init__(self, ques):
+        self.questions = ques
         self.score = 0
 
     def grade_exam(self):
