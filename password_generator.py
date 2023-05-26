@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import random
 
 letters = [
@@ -41,3 +42,7 @@ for c in listPassword:
     password += c
 
 print(password)
+=======
+
+
+>>>>>>> 4271be5 (...Ranom password generator...)
