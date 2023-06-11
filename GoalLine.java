@@ -1,4 +1,4 @@
-package org.example;
+package exercises;
 
 /**
  * @author <a href="mailto:morpheusoftwares@gmail.com">Morpheus Softwares</a>
