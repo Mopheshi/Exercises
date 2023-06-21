@@ -31,14 +31,14 @@ def drawVijay():
     obj.draw()
 
 
-def drawFlag():
+def drawIndianFlag():
     obj = lib.flag()
     obj.draw()
 
 
-drawTomHolland()
+# drawTomHolland()
 # drawVijay()
-# drawFlag()
+drawIndianFlag()
 # drawRobertDowneyJr()
 # drawIronMan()
 # drawBTS()
