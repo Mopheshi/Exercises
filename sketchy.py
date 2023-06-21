@@ -21,7 +21,25 @@ def drawGojo():
     obj.draw()
 
 
+def drawTomHolland():
+    obj = lib.tom_holland()
+    obj.draw()
+
+
+def drawVijay():
+    obj = lib.vijay()
+    obj.draw()
+
+
+def drawFlag():
+    obj = lib.flag()
+    obj.draw()
+
+
+drawTomHolland()
+# drawVijay()
+# drawFlag()
 # drawRobertDowneyJr()
-drawIronMan()
+# drawIronMan()
 # drawBTS()
 # drawGojo()
