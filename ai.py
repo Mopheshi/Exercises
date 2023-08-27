@@ -23,9 +23,45 @@ def generate_quote():
 
 
 # Main function
+# def main():
+#     quote = generate_quote()
+#     print(quote)
+
+
+def generate_character_patterns():
+    patterns = {
+        'A': [
+            "  *  ",
+            " * * ",
+            "*   *",
+            "*****",
+            "*   *"
+        ],
+        'B': [
+            "**** ",
+            "*   *",
+            "**** ",
+            "*   *",
+            "**** "
+        ],
+        # Add more patterns for other characters here
+    }
+    return patterns
+
+
+def print_character_pattern(char, patterns):
+    if char in patterns:
+        for line in patterns[char]:
+            print(line)
+    else:
+        print("Pattern not available for this character.")
+
+
+# Main function
 def main():
-    quote = generate_quote()
-    print(quote)
+    patterns = generate_character_patterns()
+    input_char = input("Enter a character (A-Z): ").upper()
+    print_character_pattern(input_char, patterns)
 
 
 if __name__ == "__main__":
