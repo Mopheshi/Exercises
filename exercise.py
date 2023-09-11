@@ -10,9 +10,11 @@ def multiplication_table(integer):
 def multiply_table(integer):
     # using while loop
     i = 0
+
     while i < 10:  # start from 0 to 9, you can increase the range though...
         answer = i * integer
         print(f"{integer} * {i} = {answer}")
+
         i += 1  # increment by 1
 
     return
@@ -30,6 +32,7 @@ def string_counter(word):
 def even_odd(numbers):  # 'numbers' is a list in Python or array in Java
     even = 0  # initialize initial values of even and odd numbers to 0
     odd = 0
+
     for i in numbers:  # iterate over integers in list of numbers
         if i % 2 == 0:  # if the current integer is divisible by 2
             even += 1  # then increment the 'even' by 1
@@ -41,11 +44,36 @@ def even_odd(numbers):  # 'numbers' is a list in Python or array in Java
 
 def remove_duplicates(numbers):  # 'numbers' is a list in Python or array in Java
     new_list = []  # create an empty 'new_list'
+
     for i in numbers:  # iterate over integers in list of numbers
         if i not in new_list:  # check if the current value of 'i' is already in the 'new_list'
             new_list.append(i)  # add the value of the integer that's not in the 'new_list' to the 'new_list'
 
     return new_list  # return the 'new_list'
+
+
+def is_ascending(numbers):  # 'numbers' is a list in Python or array in Java
+    isAscending = True  # initialize a boolean variable to False at start
+
+    for i in range(len(numbers) - 1):  # iterate over numbers in the list minus the last element to avoid exceptions
+        if numbers[i] > numbers[i + 1]:  # if the current number in the list is greater than the next number in the list
+            isAscending = False  # change the boolean value of 'isAscending' to False
+
+    return isAscending  # otherwise return True which is the original value of 'isAscending'
+
+
+def is_abecedarian(word):  # 'word' is a string of characters to be gotten from the user
+    initialCharacter = word[0]  # initialize the first character to 'initialCharacter'
+
+    for character in word:  # iterate over all the characters in the 'word'
+        if character < initialCharacter:  # return False if the current character is less than the 'initialCharacter'
+            return False
+
+        # assign the current character to 'initialCharacter' and repeat the process
+        # until all the characters are iterated over
+        initialCharacter = character
+
+    return True
 
 
 if __name__ == "__main__":
@@ -63,8 +91,15 @@ if __name__ == "__main__":
     string = input("Enter your array of integers separated by commas ',': ")
     arr = [int(i) for i in string.split(",")]  # convert user input to list/array of integers
 
-    even_number, odd_number = even_odd(arr)  # get the returned values of even and odd numbers and assign them in order
+    # get the returned values of even and odd numbers and assign them in order
+    # even_number, odd_number = even_odd(arr)
+    #
+    # print(f"\nEven numbers = {even_number}\nOdd numbers = {odd_number}\n")
+    #
+    # print(f"Old array = {arr}\nCleaned array = {remove_duplicates(arr)}")
 
-    print(f"\nEven numbers = {even_number}\nOdd numbers = {odd_number}\n")
+    print(is_ascending(arr))
 
-    print(f"Old array = {arr}\nCleaned array = {remove_duplicates(arr)}")
+    # request string values from the user and convert them to lowercase
+    string = input("Enter a word: ").lower()
+    print(is_abecedarian(string))

@@ -32,8 +32,8 @@ public class Exercise {
         //
         //        // calling 'stringCounter' method and assigning the return value to 'numberOfCharacters' variable
         //        int numberOfCharacters = stringCounter(string);
-        //        System.out.printf("'%s' has %d letters\n", string, numberOfCharacters); // formmated print statement
-//
+        //        System.out.printf("'%s' has %d letters\n", string, numberOfCharacters); // formatted print statement
+
         // get the size of the array from the user
         System.out.println("How many numbers do you want in your array?: ");
         // initialize the 'size' of array to the user input, and 'i' to 0
@@ -46,14 +46,22 @@ public class Exercise {
             i++;    // increment the value of 'i' until it reaches the complete 'size' of the array
         }
 
-        evenOdd(array); // call the 'evenOdd' method by inserting the array variable as parameter
+//        evenOdd(array); // call the 'evenOdd' method by inserting the array variable as parameter
 
         // call the 'removeDuplicates' method by inserting the array variable as parameter
 //         int[] cleanedArray = removeDuplicates(array);
-        Object[] cleanedArray = removeMultiples(array);
+//        Object[] cleanedArray = removeMultiples(array);
 
-        System.out.println("Old array = " + Arrays.toString(array));
-        System.out.println("Cleaned array = " + Arrays.toString(cleanedArray));
+//        System.out.println("Old array = " + Arrays.toString(array));
+//        System.out.println("Cleaned array = " + Arrays.toString(cleanedArray));
+
+        System.out.println(Arrays.toString(array));
+        System.out.println("Ascending order = " + isAscending(array));
+
+        System.out.println();
+
+        System.out.println("Type a word to check if it is abecedarian: ");
+        System.out.println("Abecedarian = " + isAbecedarian(scanner.next().toLowerCase()));
     }
 
     /**
@@ -146,7 +154,6 @@ public class Exercise {
      * Removes all multiple elements from from array
      */
     private static Object[] removeMultiples(int[] array) {
-        int size = array.length;
         ArrayList<Integer> arrayIntegers = new ArrayList<>();   // create an empty ArrayList
 
         for (int i : array) {   // use enhanced for loop to iterate over all elements in the ArrayList
@@ -156,5 +163,45 @@ public class Exercise {
         }
 
         return arrayIntegers.toArray(); // return the new ArrayList object containing unique elements from the array
+    }
+
+    /**
+     * Checks if an array of integers is sorted in ascending order or not, and returns it's boolean result
+     */
+    private static boolean isAscending(int[] array) {
+        int size = array.length;
+
+        // return true is the array has only one element,but the algorithm below handles that
+//        if (size == 1) return true;
+
+        // the enhanced for loop below has the same effect as the one above
+        for (int i = 0; i < size - 1; i++) {
+            int currentInteger = array[i];  // assign to current element in the array to 'currentInteger' variable
+
+            // return false if the 'currentInteger' is > the next element in the array
+            if (currentInteger > array[i + 1]) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if a string is abecedarian or not and returns it's boolean result
+     */
+    private static boolean isAbecedarian(String s) {
+        char c = 'a';
+        int size = s.length();
+
+//        if (size == 1)    // return true if 's' is just a one-letter word, but the algorithm below handles that
+//            return true;
+
+        // iterate over all characters in string 's', we subtract 1 from the length to avoid exceptions
+        for (int i = 0; i < size; i++) {
+            // if the current character is < or = the next character in 's'
+            if (c <= s.charAt(i)) c = s.charAt(i);    // initialize c to the current character in the string 's'
+            else return false;
+        }
+
+        return true;
     }
 }
