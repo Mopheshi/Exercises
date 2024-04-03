@@ -1,4 +1,4 @@
-# NLP Projects Repository
+# NLP Exercises Repository
 
 Welcome to my NLP Projects Repository! This repository is dedicated to various exercises and projects related to Natural Language Processing (NLP). Whether you're a beginner looking to learn the basics or an experienced practitioner wanting to explore advanced techniques, this repository aims to provide a variety of resources to help you sharpen your NLP skills.
 
