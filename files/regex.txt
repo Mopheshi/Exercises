@@ -1,0 +1,27 @@
+1. Literal Characters: Regular characters match themselves. For example, the regex `abc` would match the string "abc" in the text.
+
+2. `.` (dot): Matches any single character except newline (`\n`).
+
+3. `*`: Matches zero or more occurrences of the preceding character or group. For example, `a*` matches zero or more "a" characters.
+
+4. `+`: Matches one or more occurrences of the preceding character or group. For example, `a+` matches one or more "a" characters.
+
+5. `?`: Matches zero or one occurrence of the preceding character or group. For example, `a?` matches zero or one "a" character.
+
+6. `\` (backslash): Escapes special characters, allowing them to be treated as literals. For example, `\.` matches a period character instead of any character.
+
+7. `[]` (character class): Matches any single character within the brackets. For example, `[aeiou]` matches any vowel character.
+
+8. `[^]` (negated character class): Matches any single character not within the brackets. For example, `[^0-9]` matches any character that is not a digit.
+
+9. `^`: Matches the start of a string. When used within a character class (`[]`), it negates the class. For example, `^abc` matches "abc" only if it's at the start of the string.
+
+10. `$`: Matches the end of a string. For example, `abc$` matches "abc" only if it's at the end of the string.
+
+11. `\b`: Matches a word boundary, such as a space, punctuation, or the beginning/end of a string.
+
+12. `\d`: Matches any digit character (equivalent to `[0-9]`).
+
+13. `\w`: Matches any word character (equivalent to `[a-zA-Z0-9_]`).
+
+14. `\s`: Matches any whitespace character (space, tab, newline).
