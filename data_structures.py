@@ -3,7 +3,7 @@ import math
 
 def print_even(n):
     """
-    Function to print all the even numbers between 1 and a given number n
+    Function to print all the even numbers between one and a given number n
     :param n:
     """
     for n in range(2, n):
@@ -26,7 +26,8 @@ def factorial(n):
 def num_check(n):
     """
     Function that takes an integer as input and returns "Positive" if the number is greater than zero, "Negative" if
-    it's less than zero, and "Zero" if it's equal to zero. :param n:
+    it's less than zero, and "Zero" if it's equal to zero.
+    Param n:
     """
     if n > 0:
         return 'Positive'
@@ -104,10 +105,12 @@ def city_population(cities):
     :param cities:
     :return city:
     """
+    city = ''
     population = 0
-    for city in cities:
-        if population < cities[city]:
-            population = cities[city]
+    for c in cities:
+        if population < cities[c]:
+            population = cities[c]
+            city = c
     return f'{city} has the highest population of {cities[city]}'
 
 
@@ -117,11 +120,11 @@ def prime_set(n):
     :param n:
     :return:
     """
-    primes = set()
+    prime_nums = set()
     for num in range(2, n + 1):
         if all(num % i != 0 for i in range(2, num)):
-            primes.add(num)
-    return primes
+            prime_nums.add(num)
+    return prime_nums
 
 
 def even_set(n):
@@ -130,11 +133,11 @@ def even_set(n):
     :param n:
     :return:
     """
-    evens = set()
+    even_nums = set()
     for num in range(1, n):
         if num % 2 == 0:
-            evens.add(num)
-    return evens
+            even_nums.add(num)
+    return even_nums
 
 
 def set_intersection(set1, set2):
@@ -165,8 +168,8 @@ print(circle_area(5))
 print(is_palindrome('Madam'))
 print(remove_duplicates([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
 
-citiez = {'London': 9000000, 'Paris': 2200000, 'Tokyo': 14000000}
-print(city_population(citiez))
+city_names = {'London': 9000000, 'Paris': 2200000, 'Tokyo': 14000000}
+print(city_population(city_names))
 
 primes = prime_set(10)
 evens = even_set(10)
