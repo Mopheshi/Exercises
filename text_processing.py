@@ -104,16 +104,16 @@ def tokenize_sentences(file):
         return words, sentences
 
 
-print(word_frequency_file('files/texts.txt'))
+print(word_frequency_file('files/sample_texts.txt'))
 
 message = input("Enter some texts: ")
 print(word_frequency_string(message))
 print(word_frequency_case_sensitive(message))
 
-print(remove_punctuation('files/texts.txt'))
-print(remove_stop_words('files/texts.txt'))
+print(remove_punctuation('files/sample_texts.txt'))
+print(remove_stop_words('files/sample_texts.txt'))
 
-tokenized_words, tokenized_sentences = tokenize_sentences('files/texts.txt')
+tokenized_words, tokenized_sentences = tokenize_sentences('files/sample_texts.txt')
 print(f'Tokenized words:\n{tokenized_words}',
       '\n\n',
       f'Tokenized sentences:\n{tokenized_sentences}')
