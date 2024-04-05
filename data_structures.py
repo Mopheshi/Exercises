@@ -165,8 +165,8 @@ print(circle_area(5))
 print(is_palindrome('Madam'))
 print(remove_duplicates([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
 
-cities = {'London': 9000000, 'Paris': 2200000, 'Tokyo': 14000000}
-print(city_population(cities))
+citiez = {'London': 9000000, 'Paris': 2200000, 'Tokyo': 14000000}
+print(city_population(citiez))
 
 primes = prime_set(10)
 evens = even_set(10)
