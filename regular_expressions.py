@@ -94,21 +94,43 @@ def extract_characters_from_tweets(posts, char):
     return chars, f'Number of {char} = {len(chars)}', f'Number of tweets = {len(posts)}'
 
 
-# Validation:
-# a. Develop a regular expression to validate a password according to specific criteria (e.g.,
-# minimum length, at least one uppercase letter and one digit).
+def validate_password(password):
+    """
+    Function to validate a password of at least 6 characters, at least one upper & lowercase letters, one special
+    character and one digit.
+    :param password: to be checked for validation
+    :return True: if the password meets the validation criteria
+    """
+    if re.fullmatch(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*.#()+-=?&]).{6,}$', password):
+        return True
+    return False
 
-# Advanced Matching:
-# a. Write a regular expression to extract all mentions of a specific word followed by a number (
-# e.g., "product123") from a text.
+
+def extract_word_number(text):
+    """
+    Function to extract to a list, all mentions of a specific word followed by a number like abc123, xyz02, etc.
+    :param text: the text to search for the word followed by a number in
+    :return list of word followed by a number
+    """
+    return re.findall(r'\b\w+\d+\b', text)
 
 
-# print(extract('files/mbox.txt', 'email'), '\n\n')
-# print(extract('files/mbox.txt', 'phone'), '\n\n')
-# print(extract('files/mbox.txt', 'date'), '\n\n')
-# print(extract('https://www.scholarships.sk/', 'url'), '\n\n')
+print(extract('files/mbox.txt', 'email'), '\n\n')
+print(extract('files/mbox.txt', 'phone'), '\n\n')
+print(extract('files/mbox.txt', 'date'), '\n\n')
+print(extract('https://www.scholarships.sk/', 'url'), '\n\n')
 
-# print(replace_word('Received', 'Mophe', 'files/mbox.txt'))
+print(replace_word('Received', 'Mophe', 'files/mbox.txt'))
 
 print(extract_characters_from_tweets(tweets, '@'), '\n\n')
 print(extract_characters_from_tweets(tweets, '#'))
+
+print(validate_password('a1Hdj*skd'))
+
+text = '''
+    The meeting is scheduled for 2pm tomorrow.
+    # Advanced Matching:
+    a. Write a regular expression to extract all mentions of a specific word followed by a number (
+    e.g., "product123", Atachiz02 Softwares, and etc1...) from a text. r'[a-zA-Z]+\d+'
+    '''
+print(extract_word_number(text))
