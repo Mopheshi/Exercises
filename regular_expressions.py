@@ -49,13 +49,16 @@ def replace_word(old_word, new_word, file):
     """
     with open(file, 'r') as f:
         text = f.read()
-        text = re.sub(rf'\b{re.escape(old_word)}\b', new_word, text)
-        print(text)
+        if old_word in text:
+            text = re.sub(rf'\b{re.escape(old_word)}\b', new_word, text)
+        else:
+            text = f'{old_word} not found in the file provided...'
         f.close()
+        return text
 
 
 # print(extract('files/mbox.txt', 'email'), '\n\n')
 # print(extract('files/mbox.txt', 'phone'), '\n\n')
 # print(extract('https://www.scholarships.sk/', 'url'), '\n\n')
 
-replace_word('Received', 'Mophe', 'files/mbox.txt')
+print(replace_word('Received', 'Mophe', 'files/mbox.txt'))
