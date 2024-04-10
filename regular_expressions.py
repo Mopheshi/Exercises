@@ -1,17 +1,28 @@
 import re
 
+# import nltk
 import requests
+from nltk.corpus import twitter_samples
+
+# Download the twitter sample dataset first if not already downloaded
+# nltk.download('twitter_samples')
+
+all_positive_tweets = twitter_samples.strings('positive_tweets.json')
+all_negative_tweets = twitter_samples.strings('negative_tweets.json')
+
+tweets = all_positive_tweets + all_negative_tweets  # Concatenate the lists.
 
 
 def extract(file, parameter):
     """
-    Function to extract all emails or phone numbers from a text file
+    Function to extract all emails, phone numbers, dates or urls from a text file
     :param file: path or web url
-    :param parameter: email, phone or url
+    :param parameter: email, phone, date or url
     :return list of emails, phone numbers of urls
     """
     emails = list()
     phones = list()
+    dates = list()
 
     if parameter == 'email':
         with open(file, 'r') as f:
@@ -29,6 +40,18 @@ def extract(file, parameter):
                 phones.extend(match)
             f.close()
             return phones, len(phones)
+    elif parameter == 'date':
+        with open(file, 'r') as f:
+            for line in f:
+                match1 = re.findall(r'^\d{2}\d{2}/\d{4}$', line)
+                match2 = re.findall(r'^\d{4} \d{2} \d{2}$', line)
+                match3 = re.findall(r'\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s\d{1,2}\s(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|'
+                                    r'Sep|Oct|Nov|Dec)\s\d{4}\b', line)
+                dates.extend(match1)
+                dates.extend(match2)
+                dates.extend(match3)
+            f.close()
+            return dates, len(dates)
     elif parameter == 'url':
         response = requests.get(file)
         if response.status_code == 200:
@@ -57,8 +80,35 @@ def replace_word(old_word, new_word, file):
         return text
 
 
-# print(extract('files/mbox.txt', 'email'), '\n\n')
+def extract_characters_from_tweets(posts, char):
+    """
+    Function to extract all characters from a tweet
+    :param posts: The tweets to extract characters from
+    :param char: The character to extract from tweets, e.g. '#', '@'
+    :return list of characters in the tweets
+    """
+    chars = list()
+    for tweet in posts:
+        c = re.findall(rf'{char}\w+', tweet)
+        chars.extend(c)
+    return chars, f'Number of {char} = {len(chars)}', f'Number of tweets = {len(posts)}'
+
+
+# Validation:
+# a. Develop a regular expression to validate a password according to specific criteria (e.g.,
+# minimum length, at least one uppercase letter and one digit).
+
+# Advanced Matching:
+# a. Write a regular expression to extract all mentions of a specific word followed by a number (
+# e.g., "product123") from a text.
+
+
+print(extract('files/mbox.txt', 'email'), '\n\n')
 # print(extract('files/mbox.txt', 'phone'), '\n\n')
+# print(extract('files/mbox.txt', 'date'), '\n\n')
 # print(extract('https://www.scholarships.sk/', 'url'), '\n\n')
 
-print(replace_word('Received', 'Mophe', 'files/mbox.txt'))
+# print(replace_word('Received', 'Mophe', 'files/mbox.txt'))
+
+print(extract_characters_from_tweets(tweets, '@'), '\n\n')
+print(extract_characters_from_tweets(tweets, '#'))
