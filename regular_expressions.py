@@ -103,7 +103,7 @@ def extract_characters_from_tweets(posts, char):
 # e.g., "product123") from a text.
 
 
-print(extract('files/mbox.txt', 'email'), '\n\n')
+# print(extract('files/mbox.txt', 'email'), '\n\n')
 # print(extract('files/mbox.txt', 'phone'), '\n\n')
 # print(extract('files/mbox.txt', 'date'), '\n\n')
 # print(extract('https://www.scholarships.sk/', 'url'), '\n\n')
