@@ -1,4 +1,4 @@
-from sw import stop_words
+from vars import stop_words
 import nltk
 
 
@@ -85,7 +85,7 @@ def remove_stop_words(file):
     cleaned_text = remove_punctuation(file).lower().split()
     text = list()
     for word in cleaned_text:
-        if word not in stop_words:  # stop_words is a list of common words like "the", "is", "and" etc. in a file sw.py
+        if word not in stop_words:  # stop_words is a list of common words like "the", "is", "and" etc. in a file vars.py
             text.append(word)
     return text
 

@@ -1,7 +1,10 @@
 import nltk
-from nltk import word_tokenize, pos_tag
-
 import spacy
+from nltk import word_tokenize, pos_tag
+from nltk.corpus import twitter_samples
+from spacytextblob.spacytextblob import SpacyTextBlob
+
+from vars import message, positive_words, negative_words, reviews, categories
 
 # Download the models if not already installed
 # nltk.download("popular")
@@ -60,29 +63,112 @@ def ner_spacy(text):
     return named_entities  # Return the list of named entities
 
 
-# Sentiment Analysis:
-# a. Write a Python script using NLTK to perform sentiment analysis on a collection of tweets and classify them as
-# positive, negative, or neutral.
-# b. Develop a sentiment analysis model using spaCy to analyze the sentiment of product reviews and assign a sentiment
-# score to each review.
+def sentiment_analysis_nltk(tweets):
+    """
+    Function to perform sentiment analysis on a collection of tweets using NLTK.
+    :param tweets: List of tweets to be analyzed.
+    :return: List of tuples containing tweet text and corresponding sentiment (positive, negative, or neutral).
+    """
+    sentiment_scores = []  # Initialize an empty list to store sentiment scores
+    for tweet in tweets:  # Iterate over each tweet
+        words = word_tokenize(tweet.lower())  # Tokenize the tweet and convert to lowercase
+        positive_score = sum(1 for word in words if word in positive_words)  # Calculate positive score
+        negative_score = sum(1 for word in words if word in negative_words)  # Calculate negative score
+        if positive_score > negative_score:  # Assign sentiment based on score comparison
+            sentiment = "positive"
+        elif positive_score < negative_score:
+            sentiment = "negative"
+        else:
+            sentiment = "neutral"
+        sentiment_scores.append((tweet, sentiment))  # Append tweet and sentiment to the list
+    return sentiment_scores  # Return the list of sentiment scores
 
 
-message = '''
-    Natural Language Processing (NLP) is a subfield of artificial intelligence that focuses on the interaction
-    between computers and humans using natural language. It is used to apply machine learning algorithms to text and
-    speech. Some common NLP tasks include part-of-speech tagging, named entity recognition, sentiment analysis,
-    and text classification.
-    '''
-# print(pos_tagging_nltk(message))
-# print(pos_tagging_spacy(message))
-# print(ner_nltk(message))
-print(ner_spacy(message))
+def sentiment_analysis_nltk_optimized(tweets):
+    """
+    Function to perform sentiment analysis on a collection of tweets using NLTK.
+    :param tweets: List of tweets to be analyzed.
+    :return: List of tuples containing tweet text and corresponding sentiment (positive, negative, or neutral).
+    """
+    sentiment_scores = []  # Initialize an empty list to store sentiment scores
+    for tweet in tweets:  # Iterate over each tweet
+        words = word_tokenize(tweet.lower())  # Tokenize the tweet and convert to lowercase
+        positive_score = 0  # Initialize positive score
+        negative_score = 0  # Initialize negative score
+        for word in words:  # Iterate over words
+            if word in positive_words:  # Check if word is in positive words
+                positive_score += 1  # Increment positive score
+            elif word in negative_words:  # Check if word is in negative words
+                negative_score += 1  # Increment negative score
+        if positive_score > negative_score:  # Assign sentiment based on score comparison
+            sentiment = "positive"
+        elif positive_score < negative_score:
+            sentiment = "negative"
+        else:
+            sentiment = "neutral"
+        sentiment_scores.append((tweet, sentiment))  # Append tweet and sentiment to the list
+    return sentiment_scores  # Return the list of sentiment scores
+
 
 # Text Classification:
 # a. Use NLTK to build a basic text classifier to categorize news articles into predefined categories like sports,
 # politics, technology, etc.
 # b. Implement a more advanced text classification model using spaCy to classify customer support tickets into different
 # categories based on their content.
+
+def text_classification_nltk(text):
+    """
+    Function to perform a basic text classifier using NLTK.
+    :param text: Input text to be classified.
+    :return: Predicted category for the input text.
+    """
+    # Tokenize the input text
+    tokens = word_tokenize(text.lower())
+    # Initialize category scores
+    category_scores = {category: 0 for category in categories}
+    # Calculate category scores based on keyword matches
+    for token in tokens:
+        for category, keywords in categories.items():
+            if token in keywords:
+                category_scores[category] += 1
+    # Predict the category with the highest score
+    predicted_category = max(category_scores, key=category_scores.get)
+    return predicted_category
+
+
+def text_classification_spacy(text):
+    """
+    Function to classify customer support tickets into different
+    categories based on their content using spaCy.
+    NOTE: This function uses the spaCy model loaded earlier in the script, and it is not optimal for this task.
+    :param text: Input text to be classified.
+    :return: Predicted category for the input text.
+    """
+    doc = nlp(text)  # Process the text using the spaCy model
+    category_scores = {category: 0 for category in categories}  # Initialize category scores
+    for token in doc:  # Iterate over tokens in the document
+        for category, keywords in categories.items():  # Iterate over categories and keywords
+            if token.text.lower() in keywords:  # Check if token is in the category keywords
+                category_scores[category] += 1  # Increment category score
+    predicted_category = max(category_scores, key=category_scores.get)  # Predict the category with the highest score
+    return predicted_category  # Return the predicted category
+
+
+# print(pos_tagging_nltk(message))
+# print(pos_tagging_spacy(message))
+# print(ner_nltk(message))
+# print(ner_spacy(message))
+
+# Tweets for sentiment analysis
+# positive_tweet = twitter_samples.strings('positive_tweets.json')[:50]  # Limit the number of tweets to first 50
+# negative_tweet = twitter_samples.strings('negative_tweets.json')[:50]  # Limit the number of tweets to first 50
+# tweets = positive_tweet + negative_tweet # Combine positive and negative tweets (optional)
+# print(sentiment_analysis_nltk(tweets))
+
+# print(sentiment_analysis_spacy(reviews))
+
+# print(text_classification_nltk(message))
+print(text_classification_spacy(message))
 
 # Text Summarization:
 # a. Write a script using NLTK to summarize a given text document by extracting the most important sentences.
