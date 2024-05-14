@@ -1,4 +1,4 @@
-import Week1.WeekOne;
+import Week1.Labs.Labs;
 
 import java.util.Scanner;
 
@@ -23,7 +23,7 @@ public class Main {
         System.out.println("Enter the value of E: ");
         e = scanner.nextInt();
 
-        WeekOne.uniformRandomNumbers(a, b);
-        WeekOne.threeSort(c, d, e);
+        Labs.uniformRandomNumbers(a, b);
+        Labs.threeSort(c, d, e);
     }
 }

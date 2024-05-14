@@ -1,8 +1,8 @@
-package Week1;
+package Week1.Labs;
 
-public class WeekOne {
+public class Labs {
 
-    public WeekOne() {
+    public Labs() {
     }
 
     /**
