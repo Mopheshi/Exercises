@@ -43,7 +43,6 @@ public class WeekOne {
         int max = Math.max(c, Math.min(a, b));
         int mid = a + b + c - min - max;
 
-
         System.out.printf("[%d, %d, %d] sorted in ascending order: [%d, %d, %d]\n", a, b, c, min, mid, max);
     }
 }
