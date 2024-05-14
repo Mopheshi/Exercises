@@ -110,12 +110,6 @@ def sentiment_analysis_nltk_optimized(tweets):
     return sentiment_scores  # Return the list of sentiment scores
 
 
-# Text Classification:
-# a. Use NLTK to build a basic text classifier to categorize news articles into predefined categories like sports,
-# politics, technology, etc.
-# b. Implement a more advanced text classification model using spaCy to classify customer support tickets into different
-# categories based on their content.
-
 def text_classification_nltk(text):
     """
     Function to perform a basic text classifier using NLTK.
@@ -170,7 +164,24 @@ def text_classification_spacy(text):
 # print(text_classification_nltk(message))
 print(text_classification_spacy(message))
 
+
 # Text Summarization:
 # a. Write a script using NLTK to summarize a given text document by extracting the most important sentences.
 # b. Experiment with spaCy to build a text summarization model that generates concise summaries of news articles or
 # research papers.
+def summarize_nltk(text):
+    """
+    Function to summarize a given text document using NLTK.
+    :param text: Input text to be summarized.
+    :return: Summary of the text document.
+    """
+    pass
+
+
+def summarize_spacy(text):
+    """
+    Function to summarize a given text document using spaCy.
+    :param text: Input text to be summarized.
+    :return: Summary of the text document.
+    """
+    pass
