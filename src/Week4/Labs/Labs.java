@@ -126,26 +126,27 @@ public class Labs {
         }
     }
 
-    public static void main(String[] args) {
-        Labs labs = new Labs();
+        /*
+            Write the following code in the main method of the Main class to test the methods in this class:
+            Labs labs = new Labs();
 
-        int[] arr1 = {1, 2, 2, 1, 5, 1, 1, 7, 7, 7, 7, 1, 1},
-                arr2 = {1, 2, 2, 1, 5, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                arr3 = {1, 2, 3, 4, 5, 6, 7, 9, 10};
-        int n = arr3.length + 1;
+            int[] arr1 = {1, 2, 2, 1, 5, 1, 1, 7, 7, 7, 7, 1, 1},
+                    arr2 = {1, 2, 2, 1, 5, 1, 1, 7, 7, 7, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    arr3 = {1, 2, 3, 4, 5, 6, 7, 9, 10};
+            int n = arr3.length + 1;
 
-        labs.consecutiveRuns(arr1);
-        labs.filter(arr2);
-        labs.missingValue(n, arr3);
+            labs.consecutiveRuns(arr1);
+            labs.filter(arr2);
+            labs.missingValue(n, arr3);
 
-        // Generate random sequence of real numbers between -1 and 1
-        double[] arr4 = new double[n];
-        for (int i = 0; i < n; i++) arr4[i] = (Math.random() * 2 - 1);
-        System.out.println(Arrays.toString(arr4));
-        labs.digitalSignals(arr4);
+            // Generate random sequence of real numbers between -1 and 1
+            double[] arr4 = new double[n];
+            for (int i = 0; i < n; i++) arr4[i] = (Math.random() * 2 - 1);
+            System.out.println(Arrays.toString(arr4));
+            labs.digitalSignals(arr4);
 
-        labs.histogram(5, 0.0, 1.0, arr4);
+            labs.histogram(5, 0.0, 1.0, arr4);
 
-        labs.spirographs(0.5, 0.1, 0.05);
-    }
+            labs.spirographs(0.5, 0.1, 0.05);
+        */
 }
