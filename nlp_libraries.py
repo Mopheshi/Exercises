@@ -7,9 +7,9 @@ from spacytextblob.spacytextblob import SpacyTextBlob
 from collections import defaultdict
 import heapq
 
-# from gensim.summarization import summarize
+from gensim.summarization import summarize
 
-# from vars import message, positive_words, negative_words, reviews, categories
+from vars import message, positive_words, negative_words, reviews, categories
 
 # Download the models if not already installed
 # nltk.download("popular")
