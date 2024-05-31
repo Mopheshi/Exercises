@@ -198,7 +198,7 @@ nlp = spacy.load("en_core_web_sm")
 
 # Load your support ticket dataset (replace with your own data)
 # Assume you have a DataFrame with columns: "text" (ticket content) and "category" (label)
-data = pd.read_csv("support_tickets.csv")
+data = pd.read_csv("files/all_tickets.csv")
 
 # Split data into train and test sets
 X_train, X_test, y_train, y_test = train_test_split(data["text"], data["category"], test_size=0.2, random_state=42)
