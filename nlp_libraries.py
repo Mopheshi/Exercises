@@ -115,6 +115,17 @@ def sentiment_analysis_nltk_optimized(tweets):
     return sentiment_scores  # Return the list of sentiment scores
 
 
+def sentiment_analysis_spacy(texts):
+    """
+    Function to perform sentiment analysis using spaCy and spacytextblob.
+    :param texts: List of texts to be analyzed.
+    :return: List of tuples containing text and corresponding sentiment score.
+    """
+    nlp.add_pipe('spacytextblob')  # Add spacytextblob component to spaCy pipeline
+    sentiment_scores = [(text, nlp(text)._.polarity) for text in texts]  # Analyze sentiment for each text
+    return sentiment_scores  # Return the list of sentiment scores
+
+
 def text_classification_nltk(text):
     """
     Function to perform a basic text classifier using NLTK.
