@@ -1,0 +1,3 @@
+C:/Users/MOPHE/CLionProjects/Exercises/cmake-build-debug/CMakeFiles/Exercises.dir
+C:/Users/MOPHE/CLionProjects/Exercises/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/MOPHE/CLionProjects/Exercises/cmake-build-debug/CMakeFiles/rebuild_cache.dir
