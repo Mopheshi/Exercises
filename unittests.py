@@ -1,233 +1,384 @@
+import numpy as np
 from dlai_grader.grading import test_case, print_feedback
 from types import FunctionType
-from collections import defaultdict
-import json
-import random
+from dlai_grader.io import suppress_stdout_stderr
 import os
-import multiprocessing
-import time
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, sessionmaker
 
-## Do NOT modify this class.
-class Node:
-	def __init__(self, data):
-		self.data = data
-		self.prev = None
-		self.next = None
 
-# Deserialize graph from JSON
-# The graph has 20 nodes, numbered 0-19
-def dg(filename):
-    with open(filename, 'r') as f:
-        data = json.load(f)
-    return defaultdict(list, {int(k): v for k, v in data.items()})
 
-def test_is_palindrome_fixed(learner_func):
+persons_data = np.array([("Alice", "New York", "Non-binary", 30), 
+         ("Bob", "Los Angeles", "Male", 18), 
+         ("Charlie", "Chicago", "Male", 60), 
+         ("David", "Houston", "Male", 59),
+         ("Eve", "Phoenix", "Non-binary", 18), 
+         ("Frank", "Los Angeles", "Non-binary", 72), 
+         ("Grace", "Chicago", "Female", 35), 
+         ("Henry", "Houston", "Male", 21), 
+         ("Ivy", "New York", "Female", 46), 
+         ("Elena", "Phoenix", "Female", 66)])
+#locations = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"]
+#genders = ["Male", "Female", "Non-binary"]
+club_descriptions = [
+    "Book Club", "Hiking Club", "Chess Club", "Photography Club", "Cooking Club",
+    "Music Club", "Gaming Club", "Fitness Club", "Art Club", "Travel Club"
+]
+
+
+def test_load_dataset(function):
     def g():
-        function_name = "is_palindrome_fixed"
-
+        function_name = function.__name__
         cases = []
 
+        # Check if function is a function method exists
         t = test_case()
-        if not isinstance(learner_func, FunctionType):
+        if not isinstance(function, FunctionType):
             t.failed = True
-            t.msg = f"{function_name} has incorrect type"
-            t.want = FunctionType
-            t.got = type(learner_func)
+            t.msg = f"{function_name} is not a function"
+            t.want = f"{function_name} must be a function"
+            t.got = f"Type of {function_name} is {type(function_name)}"
             return [t]
-        
-        test_cases = [("I like bread", False),
-                      ("There's a reason for that", False),
-                      ("Draw, O coward!", True),
-                      ("Step on no pets.", True)
-                        ]
-        
-        for sentence, result in test_cases:
-            t = test_case()
-            try:
-                res = learner_func(sentence)
-            except Exception as e:
-                t.failed = True
-                t.msg = f"{function_name} thrown an exception when sentence = \"{sentence}\". Aborting unittest"
-                t.want = f"{function_name} should run for any string"
-                t.got = f"Exception thrown was: {e}"     
-                return [t]
-            if res != result:
-                t.failed = True
-                t.msg = f"Incorrect output for sentence \"{sentence}\""
-                t.want = f"{result}"
-                t.got = f"{res}"
-            cases.append(t)
-        return cases
-
-    cases = g()
-    print_feedback(cases)
-
-
-def gr(n, l, f):a={str(i): [] for i in range(n)};b=[(i, random.randint(1, 10)) for i in range(1, n) if i not in l];c=[(i, j, random.randint(1, 10)) for i in range(1, n) for j in range(i + 1, n) if i not in l and j not in l];[a["0"].append([i, w]) or a[str(i)].append([0, w]) for i, w in b];[a[str(i)].append([j, w]) or a[str(j)].append([i, w]) for i, j, w in c];[a[str(i)].append([j, w]) for i in l for j in range(1, n) if j not in l and j != 0 for w in [random.randint(1, 10)]];open(f, 'w').write(json.dumps(a, indent=4))
-
-
-
-def test_dijkstra_fixed(learner_func):
-    import heapq
-    def g():
-        function_name = "dijkstra_fixed"
-
-        cases = []
+        if 'tmp' not in os.listdir("/"):
+            os.mkdir('/tmp')
+        # List all files in the directory
+        for filename in os.listdir('/tmp'):
+            # Create the full file path
+            file_path = os.path.join('/tmp', filename)
+            # Check if it is a file (and not a directory/subdirectory)
+            if os.path.isfile(file_path):
+                # Delete the file silently
+                os.remove(file_path)
+        with suppress_stdout_stderr():
+            session, Club, Person, friendships = function(path = '/tmp')
+        persons = session.query(Person).all()
         t = test_case()
-        if not isinstance(learner_func, FunctionType):
+        if len(persons) != 10:
             t.failed = True
-            t.msg = f"{function_name} has incorrect type"
-            t.want = FunctionType
-            t.got = type(learner_func)
+            t.msg = "Incorrect number of persons in the database"
+            t.want = 10
+            t.got = len(persons)
             return [t]
-        tcs = [[6, 18, 14], [1, 2, 1, 1, 7, 5, 16, 11, 11, 5], [17, 8, 18, 1, 13, 17, 10], [9, 16, 19, 15, 6, 5, 2, 4, 10, 8, 5], [16, 12, 16, 5, 9, 6, 19, 6, 6, 18, 4, 3, 19, 4], [2, 1, 7], [16, 15], [8, 17, 16, 8, 14, 14, 6, 15, 5, 18, 17, 14, 2, 9, 15], []]
-        tcs = [list(set(x)) for x in tcs]
-
-        
-        for l in tcs:
-            k = len(l)
-            gr(20, l, 'p')
-            g = dg('p')
-            os.remove('p')
-            t = test_case()
-            try:
-                d, valid_path = learner_func(g,0)
-                if (not isinstance(d,dict)) or (not isinstance(valid_path, bool)):
-                    t.failed = True
-                    t.msg = f"{learner_func} has incorrect output types."
-                    t.want = f"First output must be a dictionary and second output must be a boolean"
-                    t.got = f"Type of first output: {type(d)}. Type of second output: {type(valid_path)}"
-                    return [t]
-            except Exception as e:
+        names = persons_data[:,0]
+        learner_names = [x.name for x in persons]
+        names.sort()
+        learner_names.sort()
+        t = test_case()
+        if list(names) != learner_names:
+            t.failed = True
+            t.msg = "Incorrect persons in dataset"
+            t.want = f"Set of persons: {names}"
+            t.got = f"Set of persons: {learner_names}"
+            return [t]
+        query = session.query(Person.name, Person.location, Person.gender, Person.age)
+        persons_list = query.all()
+        t = test_case()
+        for person in persons_list:
+            if not isinstance(person[-1], int):
                 t.failed = True
-                t.msg = f"{function_name} thrown an exception with graph = {g}. Aborting unittest"
-                t.want = f"{function_name} must run without exceptions"
-                t.got = f"{e}"
-                return [t]
-            for node in l:
-                t = test_case()
-                if node not in d.keys():
-                    t.failed = True
-                    t.msg = f"Node {node} is not present in distances dictionary"
-                    t.want = f"Every node must be present in the distance dictionary"
-                elif d[node] != float('inf'):
-                    t.failed = True
-                    t.msg = f"Node {node} should have infinite distance for graph = {g}"
-                    t.want = f"Distance from 0 to {node} must be infinite"
-                    t.got = f"Distance is {d[node]}"
+                t.msg = "Incorrect type for persons age"
+                t.want = "Integer"
+                t.got = type(person[-1])
                 cases.append(t)
+                return [t]
+
+        persons_list = np.array(persons_list)
+        persons_list.sort(axis = 0)
+        persons_data.sort(axis = 0)
+        for person_learner, person_solution in zip(persons_list, persons_data):
+            name_learner,location_learner,gender_learner,age_learner = person_learner
+            name_solution,location_solution,gender_solution,age_solution = person_solution
             t = test_case()
-            if k != 0 and valid_path:
+            if location_learner != location_solution:
                 t.failed = True
-                t.msg = f"{learner_func} should return False for graph = {g}"
-                t.want = f"{False}"
-                t.got = f"{valid_path}"
-            elif k == 0 and (not valid_path):
+                t.msg = f"Incorrect location for person {name_solution}"
+                t.want = f"{location_solution}"
+                t.got = f"{location_learner}"
+            cases.append(t)
+            t = test_case()
+            if gender_learner != gender_solution:
                 t.failed = True
-                t.msg = f"{function_name} should return True for graph = {g}"
-                t.want = f"{True}"
-                t.got = f"{valid_path}"
+                t.msg = f"Incorrect gender for person {name_solution}"
+                t.want = f"{gender_solution}"
+                t.got = f"{gender_learner}"
+            cases.append(t)
+            if age_learner != age_solution:
+                t.failed = True
+                t.msg = f"Incorrect age for person {name_solution}"
+                t.want = f"{age_solution}"
+                t.got = f"{age_learner}"
             cases.append(t)
         return cases
+    cases = g()
+    print_feedback(cases)
+
+
+def test_get_club_members(load_dataset, function):
     
-    cases = g()
-    print_feedback(cases)
-
-
-def test_StackFixed(learner_func):
+    correct = {'Book Club': ['Eve', 'Alice', 'Grace', 'Frank', 'Charlie', 'Elena'],
+ 'Hiking Club': ['Frank', 'Ivy', 'Eve', 'Alice', 'David', 'Elena'],
+ 'Chess Club': ['Alice', 'Eve', 'Grace', 'Elena', 'Frank', 'David'],
+ 'Photography Club': ['David', 'Elena', 'Charlie', 'Alice'],
+ 'Cooking Club': ['David', 'Henry', 'Grace', 'Bob', 'Alice', 'Charlie'],
+ 'Music Club': ['Alice', 'Charlie', 'Eve', 'Henry'],
+ 'Gaming Club': ['Bob', 'Charlie', 'Grace', 'Alice'],
+ 'Fitness Club': ['Henry', 'Elena', 'Bob', 'Charlie'],
+ 'Art Club': ['Grace', 'David', 'Elena', 'Eve', 'Bob'],
+ 'Travel Club': ['Henry', 'David', 'Ivy', 'Eve', 'Elena']}
     def g():
-        function_name = "StackFixed"
-
-        attrs = ['push', 'pop', 'peek', 'is_empty', 'size']
-
+        function_name = function.__name__
         cases = []
+
+        # Check if function is a function method exists
         t = test_case()
-        for attr in attrs:
-            if not hasattr(learner_func, attr):
-                t.failed = True
-                t.msg = f"{function_name} does not have {attr} method. Aborting unittests"
-                return [t]
-        
-        s = learner_func()
-        vals = [1,4,6,1,4,3,5,6]
-        success = False
-        for val in vals:
-            s.push(val)
-        t = test_case()
-        for _ in range(len(vals)+1):
+        if not isinstance(function, FunctionType):
+            t.failed = True
+            t.msg = f"{function_name} is not a function"
+            t.want = f"{function_name} must be a function"
+            t.got = f"Type of {function_name} is {type(function_name)}"
+            return [t]
+        if 'tmp' not in os.listdir("/"):
+            os.mkdir('/tmp')
+        # List all files in the directory
+        for filename in os.listdir('/tmp'):
+            # Create the full file path
+            file_path = os.path.join('/tmp', filename)
+            # Check if it is a file (and not a directory/subdirectory)
+            if os.path.isfile(file_path):
+                # Delete the file silently
+                os.remove(file_path)
+        with suppress_stdout_stderr():
+            session, Club, Person, friendships = load_dataset(path = '/tmp')
+        learner = {}
+        for c in correct.keys():
+            t = test_case()
             try:
-                s.pop()
-            except IndexError:
-                success = True
-        if not success:
-            t.failed = True
-            t.msg = f"Your stack's .pop method does not work as the list .pop method"
-            t.expected = "An Exception of the right type when popping from an empty stack"
-            t.got = "The .pop didn't throw an exception OR it thrown the wrong type of exception"
-        cases.append(t)
-        t = test_case()
-        success = False
-        try:
-            s.peek()
-        except IndexError:
-            success =True
-        if not success:
-            t.failed = True
-            t.msg = f"Your stack's .peek method does not work as the respective way of getting the last element of an empty list"
-            t.want = "An execution analogous to the list execution when you try to get the last element of an empty list"
-            t.got = "Your execution didn't throw an Exception OR it thrown a differente type of exception"
-        cases.append(t)
-
-        return cases
-    cases = g()
-    print_feedback(cases)
-        
-def test_DoublyLinkedListFixed(learner_func):
-    def g():
-        function_name = "DoublyLinkedListFixed"
-
-        attrs = ['add_node', 'link_nodes', 'traverse']
-
-        cases = []
-        t = test_case()
-        for attr in attrs:
-            if not hasattr(learner_func, attr):
+                members = [x.name for x in function(session, c)]
+                learner[c] = members
+            except Exception as e:
                 t.failed = True
-                t.msg = f"{function_name} does not have {attr} method. Aborting unittests"
+                t.msg = f"Failed execution for club description {c}"
+                t.want = "Function must run properly"
+                t.got = f"Exception thrown: {e}"
                 return [t]
-        
-        s = learner_func()
-        vals = [1,5,6,7,8]
-        for val in vals:
-            s.add_node(val)
-        s.link_nodes(s.tail, s.head)
-        t = test_case()
-        time_limit = 1
-        def helper(queue,func):
-            out = func()
-            queue.put(out)
-            return
-        t = test_case()
-        q = multiprocessing.Queue()
-        p = multiprocessing.Process(target=helper, name="traverse", args=(q,s.traverse))
-        p.start()
-        time.sleep(time_limit)
-        if p.is_alive():
-            p.terminate()
-            t.failed = True
-            t.msg = "The `.traverse` method is executing for an excessively long time, suggesting it might be stuck in an infinite loop. Execution will be aborted. Investigate when your linked list has the last node pointing to the first one"
-        else:
-            p.join()
-            nodes = q.get()
-            nodes = [x.data for x in nodes]
-            if nodes != [1,5,6,7,8]:
+            
+        for c in correct.keys():
+            t = test_case()
+            learner_list = learner[c]
+            solution_list = correct[c]
+            learner_list.sort()
+            solution_list.sort()
+            if learner_list != solution_list:
                 t.failed = True
-                t.msg = f"Incorrect output for method .traverse when the last node points to the first one."
-                t.want = [1,5,6,7,8]
-                t.got = nodes
-        cases.append(t)
+                t.msg = f"Incorrect club members for club description {c}"
+                t.want = f"{solution_list}"
+                t.got = f"{learner_list}"
+            cases.append(t)
+        session.close()
         return cases
     cases = g()
     print_feedback(cases)
+
+def test_get_friends_of_person(load_dataset, function):
+    
+    correct = {'Alice': ['Bob', 'Charlie', 'David', 'Eve', 'Henry', 'Ivy', 'Elena'],
+ 'Bob': ['Alice', 'David', 'Eve', 'Frank', 'Henry', 'Ivy', 'Elena'],
+ 'Charlie': ['Alice',
+  'Bob',
+  'David',
+  'Frank',
+  'Grace',
+  'Henry',
+  'Ivy',
+  'Elena'],
+ 'David': ['Alice',
+  'Bob',
+  'Charlie',
+  'Eve',
+  'Frank',
+  'Grace',
+  'Henry',
+  'Ivy',
+  'Elena'],
+ 'Eve': ['Alice', 'Charlie', 'David', 'Frank', 'Grace', 'Henry', 'Elena'],
+ 'Frank': ['Alice',
+  'Bob',
+  'Charlie',
+  'David',
+  'Eve',
+  'Grace',
+  'Henry',
+  'Elena'],
+ 'Grace': ['Alice', 'Bob', 'David', 'Eve', 'Frank', 'Henry', 'Ivy', 'Elena'],
+ 'Henry': ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Grace', 'Elena'],
+ 'Ivy': ['Alice',
+  'Bob',
+  'Charlie',
+  'David',
+  'Eve',
+  'Frank',
+  'Grace',
+  'Henry',
+  'Elena'],
+ 'Elena': ['Alice',
+  'Charlie',
+  'David',
+  'Eve',
+  'Frank',
+  'Grace',
+  'Henry',
+  'Ivy']}
+    def g():
+        function_name = function.__name__
+        cases = []
+
+        # Check if function is a function method exists
+        t = test_case()
+        if not isinstance(function, FunctionType):
+            t.failed = True
+            t.msg = f"{function_name} is not a function"
+            t.want = f"{function_name} must be a function"
+            t.got = f"Type of {function_name} is {type(function_name)}"
+            return [t]
+        if 'tmp' not in os.listdir("/"):
+            os.mkdir('/tmp')
+        # List all files in the directory
+        for filename in os.listdir('/tmp'):
+            # Create the full file path
+            file_path = os.path.join('/tmp', filename)
+            # Check if it is a file (and not a directory/subdirectory)
+            if os.path.isfile(file_path):
+                # Delete the file silently
+                os.remove(file_path)
+        with suppress_stdout_stderr():
+            session, Club, Person, friendships = load_dataset(path = '/tmp')
+        learner = {}
+        for c in correct.keys():
+            t = test_case()
+            try:
+                members = [x.name for x in function(session, c)]
+                learner[c] = members
+            except Exception as e:
+                t.failed = True
+                t.msg = f"Failed execution for club description {c}"
+                t.want = "Function must run properly"
+                t.got = f"Exception thrown: {e}"
+                return [t]
+            
+        for c in correct.keys():
+            t = test_case()
+            learner_list = learner[c]
+            solution_list = correct[c]
+            learner_list.sort()
+            solution_list.sort()
+            if learner_list != solution_list:
+                t.failed = True
+                t.msg = f"Incorrect friends for person {c}"
+                t.want = f"{solution_list}"
+                t.got = f"{learner_list}"
+            cases.append(t)
+        return cases
+    cases = g()
+    print_feedback(cases)
+            
+def test_get_persons_who_consider_them_friend(load_dataset, function):
+    
+    correct = {'Alice': ['Eve',
+  'Ivy',
+  'Charlie',
+  'Henry',
+  'Bob',
+  'Frank',
+  'David',
+  'Grace',
+  'Elena'],
+ 'Bob': ['Frank', 'Ivy', 'David', 'Grace', 'Alice', 'Charlie', 'Henry'],
+ 'Charlie': ['Henry', 'Elena', 'Ivy', 'Eve', 'Frank', 'Alice', 'David'],
+ 'David': ['Grace',
+  'Bob',
+  'Henry',
+  'Alice',
+  'Frank',
+  'Ivy',
+  'Elena',
+  'Eve',
+  'Charlie'],
+ 'Eve': ['Henry', 'Frank', 'Grace', 'Elena', 'Bob', 'Alice', 'David', 'Ivy'],
+ 'Frank': ['Elena', 'Bob', 'David', 'Charlie', 'Ivy', 'Eve', 'Grace'],
+ 'Grace': ['Charlie', 'Ivy', 'Elena', 'David', 'Frank', 'Henry', 'Eve'],
+ 'Henry': ['David',
+  'Bob',
+  'Grace',
+  'Ivy',
+  'Charlie',
+  'Frank',
+  'Elena',
+  'Alice',
+  'Eve'],
+ 'Ivy': ['Elena', 'Grace', 'Alice', 'David', 'Charlie', 'Bob'],
+ 'Elena': ['Grace',
+  'Frank',
+  'Bob',
+  'Henry',
+  'Eve',
+  'Ivy',
+  'David',
+  'Charlie',
+  'Alice']}
+    def g():
+        function_name = function.__name__
+        cases = []
+
+        # Check if function is a function method exists
+        t = test_case()
+        if not isinstance(function, FunctionType):
+            t.failed = True
+            t.msg = f"{function_name} is not a function"
+            t.want = f"{function_name} must be a function"
+            t.got = f"Type of {function_name} is {type(function_name)}"
+            return [t]
+        if 'tmp' not in os.listdir("/"):
+            os.mkdir('/tmp')
+        # List all files in the directory
+        for filename in os.listdir('/tmp'):
+            # Create the full file path
+            file_path = os.path.join('/tmp', filename)
+            # Check if it is a file (and not a directory/subdirectory)
+            if os.path.isfile(file_path):
+                # Delete the file silently
+                os.remove(file_path)
+        with suppress_stdout_stderr():
+            session, Club, Person, friendships = load_dataset(path = '/tmp')
+        learner = {}
+        for c in correct.keys():
+            t = test_case()
+            try:
+                members = [x.name for x in function(session, c)]
+                learner[c] = members
+            except Exception as e:
+                t.failed = True
+                t.msg = f"Failed execution for club description {c}"
+                t.want = "Function must run properly"
+                t.got = f"Exception thrown: {e}"
+                return [t]
+            
+        for c in correct.keys():
+            t = test_case()
+            learner_list = learner[c]
+            solution_list = correct[c]
+            learner_list.sort()
+            solution_list.sort()
+            if learner_list != solution_list:
+                t.failed = True
+                t.msg = f"Incorrect persons who consider {c} a friend"
+                t.want = f"{solution_list}"
+                t.got = f"{learner_list}"
+            cases.append(t)
+        return cases
+    cases = g()
+    print_feedback(cases)
+                      
+    
         
-         
+    
