@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+  </head>
+  <body>
+    <script>
+      let cubes = [];
+      let level = 2; // Recursion level for Menger sponge
+      let size = 400; // Size of the sponge
+      let cubeSize;
+      let ballPos, ballVel, gravity, ballRadius, damping;
+      let angleX, angleY, angleZ;
+      let speedX, speedY, speedZ;
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight, WEBGL);
+        camera(0, 0, 1200, 0, 0, 0, 0, 1, 0); // Position camera to view the scene
+        cubeSize = size / pow(3, level);
+        generateMengerSponge(cubes, level, size, createVector(0, 0, 0));
+
+        // Initialize bouncing ball
+        ballRadius = 40;
+        ballPos = createVector(0, -size / 2 + ballRadius, 0); // Start near the top
+        ballVel = createVector(0, 0, 0);
+        gravity = createVector(0, 0.1, 0); // Gravity pulls downward
+        damping = 0.9; // Bounce damping
+
+        // Initialize rotation angles and speeds
+        angleX = 0;
+        angleY = 0;
+        angleZ = 0;
+        speedX = random(-0.01, 0.01);
+        speedY = random(-0.01, 0.01);
+        speedZ = random(-0.01, 0.01);
+      }
+
+      function draw() {
+        // Draw gradient background
+        push();
+        translate(0, 0, -500); // Position behind the scene
+        let color1 = color(0, 0, 50); // Dark blue (top)
+        let color2 = color(100, 100, 255); // Light blue (bottom)
+        beginShape();
+        fill(color1);
+        vertex(-1500, -1500, 0);
+        vertex(1500, -1500, 0);
+        fill(color2);
+        vertex(1500, 1500, 0);
+        vertex(-1500, 1500, 0);
+        endShape();
+        pop();
+
+        // Add lighting
+        ambientLight(50); // Soft ambient light
+        directionalLight(255, 255, 255, -1, -1, -1); // Sunlight from top-left
+
+        // Draw rotating Menger sponge
+        push();
+        rotateX(angleX);
+        rotateY(angleY);
+        rotateZ(angleZ);
+        specularMaterial(255);
+        shininess(32);
+        for (let cubePos of cubes) {
+          push();
+          translate(cubePos.x, cubePos.y, cubePos.z);
+          let r = map(cubePos.x, -size / 2, size / 2, 0, 255);
+          let g = map(cubePos.y, -size / 2, size / 2, 0, 255);
+          let b = map(cubePos.z, -size / 2, size / 2, 0, 255);
+          fill(r, g, b); // Dynamic colors
+          box(cubeSize);
+          pop();
+        }
+        pop();
+
+        // Draw and update ball
+        push();
+        specularMaterial(255);
+        shininess(32);
+        translate(ballPos.x, ballPos.y, ballPos.z);
+        fill(255, 0, 0); // Red ball
+        sphere(ballRadius);
+        pop();
+
+        // Ball physics
+        ballVel.add(gravity);
+        ballPos.add(ballVel);
+
+        // Collision with bounds
+        let minBound = -size / 2 + ballRadius;
+        let maxBound = size / 2 - ballRadius;
+        if (ballPos.x < minBound) {
+          ballPos.x = minBound;
+          ballVel.x = -ballVel.x * damping;
+        } else if (ballPos.x > maxBound) {
+          ballPos.x = maxBound;
+          ballVel.x = -ballVel.x * damping;
+        }
+        if (ballPos.y < minBound) {
+          ballPos.y = minBound;
+          ballVel.y = -ballVel.y * damping;
+        } else if (ballPos.y > maxBound) {
+          ballPos.y = maxBound;
+          ballVel.y = -ballVel.y * damping;
+        }
+        if (ballPos.z < minBound) {
+          ballPos.z = minBound;
+          ballVel.z = -ballVel.z * damping;
+        } else if (ballPos.z > maxBound) {
+          ballPos.z = maxBound;
+          ballVel.z = -ballVel.z * damping;
+        }
+
+        // Update rotation angles
+        angleX += speedX;
+        angleY += speedY;
+        angleZ += speedZ;
+        if (frameCount % 100 === 0) {
+          speedX = random(-0.01, 0.01);
+          speedY = random(-0.01, 0.01);
+          speedZ = random(-0.01, 0.01);
+        }
+      }
+
+      // Generate Menger sponge recursively
+      function generateMengerSponge(cubes, level, size, pos) {
+        if (level === 0) {
+          cubes.push(pos.copy());
+        } else {
+          let newSize = size / 3;
+          for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+              for (let k = -1; k <= 1; k++) {
+                if (
+                  (Math.abs(i) === 1 && Math.abs(j) === 1) ||
+                  (Math.abs(i) === 1 && Math.abs(k) === 1) ||
+                  (Math.abs(j) === 1 && Math.abs(k) === 1)
+                ) {
+                  let newPos = pos
+                    .copy()
+                    .add(createVector(i * newSize, j * newSize, k * newSize));
+                  generateMengerSponge(cubes, level - 1, newSize, newPos);
+                }
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

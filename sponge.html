@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+</head>
+<body>
+<script>
+let cubes = [];
+let level = 2; // Recursion level (2 is manageable, 3 is denser)
+let size = 200; // Initial size of the sponge
+let cubeSize;
+
+function setup() {
+  createCanvas(400, 400, WEBGL);
+  // Calculate size of smallest cubes
+  cubeSize = size / pow(3, level);
+  // Generate sponge once at start
+  generateMengerSponge(cubes, level, size, createVector(0, 0, 0));
+}
+
+function draw() {
+  background(0);
+  
+  // Lighting setup
+  ambientLight(50); // Soft base lighting
+  let lightAngle = frameCount * 0.01;
+  let orbitRadius = 300;
+  let lightX = cos(lightAngle) * orbitRadius;
+  let lightY = sin(lightAngle) * orbitRadius;
+  let lightZ = 0;
+  pointLight(255, 255, 255, lightX, lightY, lightZ); // Orbiting white light
+  
+  // Rotate sponge
+  let angle = frameCount * 0.01;
+  rotateY(angle);
+  
+  // Material for specular shine
+  specularMaterial(255); // White highlights
+  shininess(32); // Sharpness of shine
+  
+  // Draw all cubes
+  for (let cubePos of cubes) {
+    push();
+    translate(cubePos.x, cubePos.y, cubePos.z);
+    // Color gradient based on position
+    let r = map(cubePos.x, -size / 2, size / 2, 0, 255);
+    let g = map(cubePos.y, -size / 2, size / 2, 0, 255);
+    let b = map(cubePos.z, -size / 2, size / 2, 0, 255);
+    fill(r, g, b);
+    box(cubeSize);
+    pop();
+  }
+}
+
+// Recursive function to generate Menger sponge
+function generateMengerSponge(cubes, level, size, pos) {
+  if (level === 0) {
+    cubes.push(pos.copy());
+  } else {
+    let newSize = size / 3;
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        for (let k = -1; k <= 1; k++) {
+          // Keep cubes where at least two coordinates are at edges
+          if ((Math.abs(i) === 1 && Math.abs(j) === 1) ||
+              (Math.abs(i) === 1 && Math.abs(k) === 1) ||
+              (Math.abs(j) === 1 && Math.abs(k) === 1)) {
+            let newPos = pos.copy().add(createVector(i * newSize, j * newSize, k * newSize));
+            generateMengerSponge(cubes, level - 1, newSize, newPos);
+          }
+        }
+      }
+    }
+  }
+}
+</script>
+</body>
+</html>
